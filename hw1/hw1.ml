@@ -13,7 +13,7 @@ val oldest = fn : (int * int * int) list -> (int * int * int) option;
 type date = (int * int * int);
 
 fun is_older(d1 : date, d2 : date) =
-    (* This is ugly *)
+    (* FIXME *)
     ((#1 d1) < (#1 d2)) andalso ((#2 d1) < (#2 d2)) andalso ((#3 d1) < (#3 d2))
 
 fun number_in_month(dates : date list, month : int) =
@@ -28,4 +28,14 @@ fun date_in_month(dates : date list, m : int) =
 fun date_in_months(dates : date list, months : int list) =
     foldl (fn(m : int, out : date list) => out@date_in_month(dates, m)) [] months
 
+fun get_nth(strs : string list, n : int) =
+    if (n = 1)
+    then hd strs
+    else get_nth(tl strs, n - 1)
 
+fun date_to_string(d : date) =
+    let
+        val months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] 
+    in
+        get_nth(months, (#2 d)) ^ " " ^ Int.toString((#3 d)) ^ ", " ^ Int.toString((#1 d))
+    end
