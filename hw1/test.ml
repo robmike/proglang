@@ -19,3 +19,8 @@ date_to_string((2013, 1, 5)) = "January 5, 2013"
 date_to_string((2013, 11, 5)) = "November 5, 2013"
 date_to_string((2013, 12, 5)) = "December 5, 2013"
 
+number_before_reaching_sum(1, [1,2,4]) = 0
+number_before_reaching_sum(3, [1,2,4]) = 1
+number_before_reaching_sum(4, [1,2,4]) = 2
+number_before_reaching_sum(6, [1,2,4]) = 2
+number_before_reaching_sum(7, [1,2,4]) = 2

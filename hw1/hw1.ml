@@ -39,3 +39,15 @@ fun date_to_string(d : date) =
     in
         get_nth(months, (#2 d)) ^ " " ^ Int.toString((#3 d)) ^ ", " ^ Int.toString((#1 d))
     end
+
+fun number_before_reaching_sum(sum : int, xs : int list) =
+    let
+        val total = 0
+        val count = 0
+    in
+        if total + (hd xs) >= sum
+        then
+            0
+        else
+            1 + number_before_reaching_sum(sum - (hd xs), (tl xs))
+    end
