@@ -58,3 +58,9 @@ fun what_month(dayofyear : int) =
     in
         1 + number_before_reaching_sum(dayofyear, month_table)
     end
+
+fun month_range(doy1 : int, doy2: int) =
+    if doy2 < doy1
+    then []
+    else what_month(doy1) :: month_range(doy1 + 1, doy2)
+

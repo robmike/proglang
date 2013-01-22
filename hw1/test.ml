@@ -31,3 +31,7 @@ what_month(365) = 12
 what_month(364) = 12
 what_month(123) = 5
 what_month(234) = 8
+
+month_range(30, 32) = [1,1,2]
+month_range(31+28, 31+29) = [2,3]
+
