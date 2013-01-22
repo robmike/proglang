@@ -51,3 +51,10 @@ fun number_before_reaching_sum(sum : int, xs : int list) =
         else
             1 + number_before_reaching_sum(sum - (hd xs), (tl xs))
     end
+
+fun what_month(dayofyear : int) =
+    let
+        val month_table = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    in
+        1 + number_before_reaching_sum(dayofyear, month_table)
+    end

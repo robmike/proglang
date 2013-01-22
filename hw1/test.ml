@@ -24,3 +24,10 @@ number_before_reaching_sum(3, [1,2,4]) = 1
 number_before_reaching_sum(4, [1,2,4]) = 2
 number_before_reaching_sum(6, [1,2,4]) = 2
 number_before_reaching_sum(7, [1,2,4]) = 2
+
+what_month(1) = 1
+what_month(5) = 1
+what_month(365) = 12
+what_month(364) = 12
+what_month(123) = 5
+what_month(234) = 8
