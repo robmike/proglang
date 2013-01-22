@@ -65,5 +65,13 @@ fun month_range(doy1 : int, doy2: int) =
     then []
     else what_month(doy1) :: month_range(doy1 + 1, doy2)
 
-fun oldest(xs: list dates) =
-    
+fun oldest(xs: date list) =
+    if null xs
+    then NONE
+    else
+        let val tl_ans = oldest(tl xs)
+        in if isSome tl_ans andalso is_older(valOf tl_ans, hd xs)
+           then tl_ans
+           else SOME (hd xs)
+        end
+
