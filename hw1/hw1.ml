@@ -13,8 +13,9 @@ val oldest = fn : (int * int * int) list -> (int * int * int) option;
 type date = (int * int * int);
 
 fun is_older(d1 : date, d2 : date) =
-    (* FIXME *)
-    ((#1 d1) < (#1 d2)) andalso ((#2 d1) < (#2 d2)) andalso ((#3 d1) < (#3 d2))
+    ((#1 d1) < (#1 d2)) orelse
+    ((#1 d1) = (#1 d2)) andalso (((#2 d1) < (#2 d2)) orelse
+                                 ((#2 d1) = (#2 d2)) andalso ((#3 d1) < (#3 d2)))
 
 fun number_in_month(dates : date list, month : int) =
     foldl (fn(y : date, x : int) => if (month = (#2 y)) then x + 1 else x) 0 dates
@@ -64,3 +65,5 @@ fun month_range(doy1 : int, doy2: int) =
     then []
     else what_month(doy1) :: month_range(doy1 + 1, doy2)
 
+fun oldest(xs: list dates) =
+    
