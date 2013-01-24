@@ -21,7 +21,7 @@ fun number_in_month(dates : date list, month : int) =
     foldl (fn(y : date, x : int) => if (month = (#2 y)) then x + 1 else x) 0 dates
 
 fun number_in_months(dates : date list, months : int list) =
-    foldl (fn(m : int, count : int) => if(number_in_month(dates, m) > 0) then count+1 else count) 0 months
+    foldl (fn(m : int, count : int) => number_in_month(dates, m) + count) 0 months
 
 fun date_in_month(dates : date list, m : int) =
     rev(foldl (fn(d : date, out : date list) => if (m = (#2 d)) then d::out else out) [] dates)
