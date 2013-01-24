@@ -23,11 +23,11 @@ fun number_in_month(dates : date list, month : int) =
 fun number_in_months(dates : date list, months : int list) =
     foldl (fn(m : int, count : int) => number_in_month(dates, m) + count) 0 months
 
-fun date_in_month(dates : date list, m : int) =
+fun dates_in_month(dates : date list, m : int) =
     rev(foldl (fn(d : date, out : date list) => if (m = (#2 d)) then d::out else out) [] dates)
 
-fun date_in_months(dates : date list, months : int list) =
-    foldl (fn(m : int, out : date list) => out@date_in_month(dates, m)) [] months
+fun dates_in_months(dates : date list, months : int list) =
+    foldl (fn(m : int, out : date list) => out@dates_in_month(dates, m)) [] months
 
 fun get_nth(strs : string list, n : int) =
     if (n = 1)
