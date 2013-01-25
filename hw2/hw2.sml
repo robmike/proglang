@@ -16,13 +16,26 @@ fun all_except_option(s : string, xs: string list) =
                          | SOME (z::zs) => SOME (x::(z::zs))
                          | SOME [] => SOME (x::[])
 
-fun get_substitutions1(xs : string list list, s) =
+fun get_substitutions1(xs : string list list, s : string) =
     case xs of
         [] => []
       | x::xs' => case all_except_option(s, x) of
-                     NONE => get_subsitutions1(xs', s)
-                   | SOME [] => get_subsitutions1(xs',s)
-                   | SOME (z::zs) => (z::zs)@get_subsitutions1(xs',s)
+                     NONE => get_substitutions1(xs', s)
+                   | SOME [] => get_substitutions1(xs',s)
+                   | SOME (z::zs) => (z::zs)@get_substitutions1(xs',s)
+
+
+fun get_substitutions2(xs : string list list, s : string) =
+    let fun helper(xs : string list list, s : string, sofar : string list) =
+            case xs of
+                [] => sofar
+              | x::xs' => case all_except_option(s, x) of
+                              NONE => helper(xs', s, sofar)
+                            | SOME [] => helper(xs', s, sofar)
+                            | SOME (z::zs) => helper(xs',s, sofar@(z::zs))
+    in helper(xs, s, [])
+    end
+
 
 (* you may assume that Num is always used with values 2, 3, ..., 9
    though it will not really come up *)
