@@ -16,17 +16,13 @@ fun all_except_option(s : string, xs: string list) =
                          | SOME (z::zs) => SOME (x::(z::zs))
                          | SOME [] => SOME (x::[])
 
-
-
-    (* case xs of *)
-    (*     [] => NONE *)
-    (*   | x::xs' => SOME x::all_except_option(s, xs') *)
-    (*   | SOME x::xs' => SOME x::all_except_option(s, xs') *)
-    (*   | s::xs' => SOME xs' *)
-    (*   | SOME s::xs' => SOME xs' *)
-    (*   | s::[] => s *)
-    (*   | SOME s::[] => s *)
-    (*   | _ => NONE *)
+fun get_substitutions1(xs : string list list, s) =
+    case xs of
+        [] => []
+      | x::xs' => case all_except_option(s, x) of
+                     NONE => get_subsitutions1(xs', s)
+                   | SOME [] => get_subsitutions1(xs',s)
+                   | SOME (z::zs) => (z::zs)@get_subsitutions1(xs',s)
 
 (* you may assume that Num is always used with values 2, 3, ..., 9
    though it will not really come up *)
