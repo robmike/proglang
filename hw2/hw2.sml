@@ -8,15 +8,15 @@ fun same_string(s1 : string, s2 : string) =
 
 (* put your solutions for problem 1 here *)
 fun all_except_option(s : string, xs: string list) =
-    let 
-        fun helper(s: string, xs: string list) =
-            case xs of
-                x::xs' => if same_string(x, s) then xs' else x::helper(s, xs')
-              | [] => []
-    in case helper(s, xs) of
-            [] => NONE
-          | x::xs' => SOME (x::xs')
-    end
+    case xs of
+        [] => NONE
+      | x::xs' => if same_string(x, s) then SOME (xs')
+                  else case all_except_option(s, xs') of
+                           NONE => NONE
+                         | SOME (z::zs) => SOME (x::(z::zs))
+                         | SOME [] => SOME (x::[])
+
+
 
     (* case xs of *)
     (*     [] => NONE *)
