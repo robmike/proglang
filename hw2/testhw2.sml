@@ -11,6 +11,6 @@ get_substitutions2([["Fred","Fredrick"],["Jeff","Jeffrey"],["Geoff","Jeff","Jeff
 
 similar_names([["Fred","Fredrick"],["Elizabeth","Betty"],["Freddie","Fred","F"]], {first="Fred", middle="W", last="Smith"}) = [{first="Fred",last="Smith",middle="W"},{first="F",last="Smith",middle="W"}, {first="Freddie",last="Smith",middle="W"}, {first="Fredrick",last="Smith",middle="W"}]
 
-get_color((Clubs, Jack)) = Black
-get_color((Diamonds, Jack)) = Red
+card_color((Clubs, Jack)) = Black
+card_color((Diamonds, Jack)) = Red
 
