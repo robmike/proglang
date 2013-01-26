@@ -83,7 +83,7 @@ fun all_same_color(xs : card list) =
     case xs of
         [] => true
         | x::[] => true
-        | x::y::xs' => (card_color(x) = card_color(y)) andalso all_same_color(xs')
+        | x::(y::xs') => (card_color(x) = card_color(y)) andalso all_same_color(y::xs')
 
 fun sum_cards(xs : card list) =
     let fun helper(xs, total : int) =
@@ -93,3 +93,15 @@ fun sum_cards(xs : card list) =
     in
         helper(xs, 0)
     end
+
+fun score(xs : card list, goal : int) =
+    let fun prelim(xs : card list) =
+        let val sum = sum_cards(xs)
+        in
+            if sum > goal then sum - goal else goal - sum
+        end
+    in
+        if all_same_color(xs) then prelim(xs) div 2 else prelim(xs)
+    end
+
+fun officiate(xs : card list, ms : move, goal : int)

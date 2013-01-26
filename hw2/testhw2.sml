@@ -25,3 +25,8 @@ all_same_color([(Clubs, Jack), (Spades, Num 10), (Spades, Ace)]) = true
 
 sum_cards([(Clubs, Jack), (Spades, Num 4), (Spades, Ace)]) = 25
 
+score([(Clubs, Jack), (Spades, Num 4), (Diamonds, Ace)], 25) = 0
+score([(Clubs, Jack), (Spades, Num 4), (Diamonds, Ace)], 35) = 10
+score([(Clubs, Jack), (Spades, Num 4), (Diamonds, Ace)], 15) = 10
+score([(Clubs, Jack), (Spades, Num 4), (Clubs, Ace)], 15) = 5
+score([(Clubs, Jack), (Spades, Num 4), (Clubs, Ace)], 35) = 5
