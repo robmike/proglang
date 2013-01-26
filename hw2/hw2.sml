@@ -36,6 +36,15 @@ fun get_substitutions2(xs : string list list, s : string) =
     in helper(xs, s, [])
     end
 
+fun similar_names(xs : string list list, fname : {first:string,middle:string,last:string} ) =
+    let val {first=f, middle=m, last=l} = fname 
+            fun helper(xs : string list) =
+                case xs of
+                    [] => [{first=f, middle=m, last=l}]
+                  | x::xs' => helper(xs')@[{first=x, middle=m, last=l}]
+    in
+        helper(get_substitutions2(xs, f))
+    end
 
 (* you may assume that Num is always used with values 2, 3, ..., 9
    though it will not really come up *)
