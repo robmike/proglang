@@ -84,3 +84,12 @@ fun all_same_color(xs : card list) =
         [] => true
         | x::[] => true
         | x::y::xs' => (card_color(x) = card_color(y)) andalso all_same_color(xs')
+
+fun sum_cards(xs : card list) =
+    let fun helper(xs, total : int) =
+            case xs of
+                [] => total
+              | x::xs' => helper(xs', card_value(x) + total)
+    in
+        helper(xs, 0)
+    end

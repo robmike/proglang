@@ -23,3 +23,5 @@ remove_card([(Hearts, Jack), (Spades, Num 10), (Spades, Ace)], (Spades, Num 10),
 all_same_color([(Hearts, Jack), (Spades, Num 10), (Spades, Ace)]) = false
 all_same_color([(Clubs, Jack), (Spades, Num 10), (Spades, Ace)]) = true
 
+sum_cards([(Clubs, Jack), (Spades, Num 4), (Spades, Ace)]) = 25
+
