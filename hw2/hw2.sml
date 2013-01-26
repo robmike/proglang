@@ -104,4 +104,18 @@ fun score(xs : card list, goal : int) =
         if all_same_color(xs) then prelim(xs) div 2 else prelim(xs)
     end
 
-fun officiate(xs : card list, ms : move, goal : int)
+fun officiate(cs : card list, ms : move list, goal : int) =
+    let
+        fun playmove(cs : card list, hcs : card list, ms : move list) =
+            case ms of
+                [] => score(hcs, goal)
+              | m::ms' => case m of
+                              Discard z => playmove(cs, remove_card(hcs, z, IllegalMove), ms')
+                            | Draw => case cs of
+                                         [] => score(hcs, goal)
+                                       | c::cs' => if score(c::hcs, goal) > goal
+                                                  then score(c::hcs, goal)
+                                                  else playmove(cs', c::hcs, ms')
+    in
+        playmove(cs, [], ms)
+    end
