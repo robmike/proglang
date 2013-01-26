@@ -17,4 +17,6 @@ card_color((Diamonds, Jack)) = Red
 card_value((Hearts, Num 5)) = 5
 card_value((Hearts, Jack)) = 10
 
+remove_card([(Hearts, Jack), (Spades, Num 10), (Spades, Ace)], (Spades, Num 10), IllegalMove)= [(Hearts,Jack),(Spades,Ace)]
+(remove_card([(Hearts, Jack), (Spades, Num 10), (Spades, Ace)], (Spades, Num 9), IllegalMove) = [(Diamonds, Ace)]) handle IllegalMove => (1 = 1) (* Should return true and not exception *)
 
