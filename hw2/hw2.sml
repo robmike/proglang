@@ -65,3 +65,11 @@ fun card_color(c : card) =
       | (Hearts, _) => Red
       | (Spades, _) => Black
 
+fun card_value(c : card) =
+    case c of
+        (_, Num i) => i
+      | (_, Jack) => 10
+      | (_, Queen) => 10
+      | (_, King) => 10
+      | (_, Ace) => 11
+

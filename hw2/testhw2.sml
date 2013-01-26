@@ -14,3 +14,7 @@ similar_names([["Fred","Fredrick"],["Elizabeth","Betty"],["Freddie","Fred","F"]]
 card_color((Clubs, Jack)) = Black
 card_color((Diamonds, Jack)) = Red
 
+card_value((Hearts, Num 5)) = 5
+card_value((Hearts, Jack)) = 10
+
+
