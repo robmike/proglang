@@ -98,7 +98,7 @@ fun score(xs : card list, goal : int) =
     let fun prelim(xs : card list) =
         let val sum = sum_cards(xs)
         in
-            if sum > goal then sum - goal else goal - sum
+            if sum > goal then 3*(sum - goal) else goal - sum
         end
     in
         if all_same_color(xs) then prelim(xs) div 2 else prelim(xs)
