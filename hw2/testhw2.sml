@@ -30,3 +30,9 @@ score([(Clubs, Jack), (Spades, Num 4), (Diamonds, Ace)], 35) = 10
 score([(Clubs, Jack), (Spades, Num 4), (Diamonds, Ace)], 15) = 10
 score([(Clubs, Jack), (Spades, Num 4), (Clubs, Ace)], 15) = 5
 score([(Clubs, Jack), (Spades, Num 4), (Clubs, Ace)], 35) = 5
+
+officiate([(Clubs, Ace)], [Draw], 5) = 3;
+officiate([(Clubs, Ace)], [Discard (Clubs, Ace)], 5) handle IllegalMove => 0
+officiate([(Clubs, Ace)], [Draw, (Discard (Clubs, Ace))], 5) = 2;
+officiate([(Clubs, Num 2), (Hearts, Jack), (Hearts, King), (Spades, Num 10)], [Draw, Draw, Draw, (Discard (Clubs, Ace))], 5) = 7;
+officiate([(Clubs, Num 2), (Hearts, Jack), (Hearts, King), (Spades, Num 10)], [Draw, Draw, Draw, (Discard (Clubs, Ace))], 25) = 2;

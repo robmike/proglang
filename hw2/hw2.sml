@@ -119,3 +119,4 @@ fun officiate(cs : card list, ms : move list, goal : int) =
     in
         playmove(cs, [], ms)
     end
+
