@@ -35,3 +35,27 @@ datatype typ = Anything
 	     | Datatype of string
 
 (**** you can put all your code here ****)
+fun only_capitals xs =
+    List.filter (fn x => (Char.isUpper(String.sub(x,0)))) xs
+
+fun longest_string1 xs =
+    List.foldl (fn (x,bigs) => if String.size(x) > String.size(bigs)
+                               then x
+                               else bigs) "" xs
+
+fun longest_string2 xs =
+    List.foldl (fn (x,bigs) => if String.size(x) >= String.size(bigs)
+                               then x
+                               else bigs) "" xs
+
+fun longest_string_helper f xs =
+    List.foldl (fn (x,bigs) => if f(String.size(x), String.size(bigs))
+                               then x
+                               else bigs) "" xs
+
+fun longest_string3 xs =
+    longest_string_helper (op >) xs
+
+fun longest_string4 xs =
+    longest_string_helper (op >=) xs
+
