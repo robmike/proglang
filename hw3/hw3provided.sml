@@ -53,9 +53,11 @@ fun longest_string_helper f xs =
                                then x
                                else bigs) "" xs
 
-fun longest_string3 xs =
-    longest_string_helper (op >) xs
+val longest_string3 = longest_string_helper (op >)
 
-fun longest_string4 xs =
-    longest_string_helper (op >=) xs
+val longest_string4 = longest_string_helper (op >=)
+
+val longest_capitalized = longest_string3 o only_capitals
+
+val rev_string = implode o rev o explode
 
