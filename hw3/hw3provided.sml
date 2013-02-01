@@ -69,3 +69,11 @@ fun first_answer f xs =
       | x::xs' => case f x of
                    SOME v => v
                  | NONE => first_answer f xs'
+
+fun all_answers f xs =
+    let fun helper f xs sofar =
+    case xs of
+           [] => sofar
+         | x::xs' => helper f xs' (SOME ((valOf sofar)@[first_answer f x]))
+    in helper f xs (SOME [])
+    end
