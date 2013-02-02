@@ -31,3 +31,20 @@ count_wildcards (TupleP ([Wildcard, UnitP, Wildcard, (TupleP [Variable "foo", Va
 count_wild_and_variable_lengths (TupleP ([Wildcard, UnitP, Wildcard, (TupleP [Variable "foo", Variable "bart", Wildcard, ConstP 4])]));
 
 count_some_var ("foo", (TupleP ([Wildcard, UnitP, Wildcard, (TupleP [Variable "foo", Variable "foo", Wildcard, ConstP 4])])));
+
+check_pat (TupleP ([Wildcard, UnitP, Wildcard, (TupleP [Variable "foo", Variable "bat", Wildcard, Variable "foot"])]));
+val it = true : bool
+- check_pat (TupleP ([Wildcard, UnitP, Wildcard, (TupleP [Variable "foo", Variable "bat", Wildcard, Variable "foo"])]));
+val it = false : bool
+
+
+match (Tuple [Tuple [Unit], Const 4], TupleP [TupleP[Variable "foo"], ConstP 4]);
+val it = SOME [("foo",Unit)] : (string * valu) list option
+- match (Tuple [Tuple [Unit], Unit], TupleP [TupleP[Variable "foo"], Variable "bar"]);
+val it = SOME [("foo",Unit),("bar",Unit)] : (string * valu) list option
+- match (Tuple [Tuple [Unit], Const 4], TupleP [TupleP[Variable "foo"], Variable "bar"]);
+val it = SOME [("foo",Unit),("bar",Const 4)] : (string * valu) list option
+- match (Tuple [Tuple [Const 4], Const 4], TupleP [TupleP[ConstP 5], Variable "bar"]);
+val it = NONE : (string * valu) list option
+- 
+

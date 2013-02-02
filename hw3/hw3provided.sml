@@ -70,11 +70,23 @@ fun first_answer f xs =
                    SOME v => v
                  | NONE => first_answer f xs'
 
-fun all_answers f xs =
+fun all_answers_wrong f xs =
     let fun helper f xs sofar =
     case xs of
            [] => sofar
          | x::xs' => helper f xs' (SOME ((valOf sofar)@[first_answer f x]))
+    in helper f xs (SOME [])
+    end
+
+fun all_answers f xs =
+    let fun helper f xs sofar =
+    case xs of
+           [] => sofar
+         | x::xs' => let val fx = f x
+                     in case fx of
+                            NONE => NONE
+                          | SOME z => helper f xs' (SOME ((valOf sofar)@z))
+                     end
     in helper f xs (SOME [])
     end
 
@@ -121,3 +133,30 @@ fun check_pat pat =
     in
         is_unique (collect_var_names pat [])
     end
+
+
+fun match (v,p) =
+    case (v,p) of
+        (_, Wildcard) => SOME []
+      | (_, Variable x) => SOME [(x, v)]
+      | (Unit, UnitP) => SOME []
+      | (Const x, ConstP y) => if x = y then SOME [] else NONE
+      | (Tuple vs, TupleP ps) => if length vs <> length ps then NONE
+                                 else all_answers
+                                          (fn (pair) => match pair)
+                                          (ListPair.zip (vs, ps))
+      | (Constructor(sx, vx), ConstructorP(sy, vy)) => if sx = sy then match(vx, vy) else NONE
+      | (_,_) => NONE
+
+
+fun flo (v,p) =
+    case (v,p) of
+        (Tuple vs, TupleP ps) => if length vs <> length ps then NONE
+                                 else all_answers 
+                                          (fn (pair) => pair)
+                                          (ListPair.zip (vs, ps))
+      | (_,_) => NONE
+
+fun first_match v ps =
+    first_answer (fn (p) => match (v,p)) ps
+    handle NoAnswer => NONE 
