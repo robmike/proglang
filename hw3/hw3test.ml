@@ -26,3 +26,8 @@ stdIn:17.1-17.29 Warning: type vars not generalized because of
    value restriction are instantiated to dummy types (X1,X2,...)
 val it = SOME [] : ?.X1 list option
 
+count_wildcards (TupleP ([Wildcard, UnitP, Wildcard, (TupleP [Variable "foo", Variable "bar", Wildcard, ConstP 4])]));
+
+count_wild_and_variable_lengths (TupleP ([Wildcard, UnitP, Wildcard, (TupleP [Variable "foo", Variable "bart", Wildcard, ConstP 4])]));
+
+count_some_var ("foo", (TupleP ([Wildcard, UnitP, Wildcard, (TupleP [Variable "foo", Variable "foo", Wildcard, ConstP 4])])));
