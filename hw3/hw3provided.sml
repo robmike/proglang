@@ -149,14 +149,5 @@ fun match (v,p) =
       | (_,_) => NONE
 
 
-fun flo (v,p) =
-    case (v,p) of
-        (Tuple vs, TupleP ps) => if length vs <> length ps then NONE
-                                 else all_answers 
-                                          (fn (pair) => pair)
-                                          (ListPair.zip (vs, ps))
-      | (_,_) => NONE
-
 fun first_match v ps =
-    first_answer (fn (p) => match (v,p)) ps
-    handle NoAnswer => NONE 
+    SOME (first_answer (fn (p) => match (v,p)) ps) handle NoAnswer => NONE

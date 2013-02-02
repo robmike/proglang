@@ -48,3 +48,9 @@ val it = SOME [("foo",Unit),("bar",Const 4)] : (string * valu) list option
 val it = NONE : (string * valu) list option
 - 
 
+first_match (Const 4) [UnitP, UnitP];
+val it = NONE : (string * valu) list option
+- first_match (Const 4) [UnitP, Variable "foo"];
+val it = SOME [("foo",Const 4)] : (string * valu) list option
+- 
+
