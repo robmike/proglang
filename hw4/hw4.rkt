@@ -38,6 +38,11 @@
             (helper (+ 1 i)))))
   (helper 1))
 
+(define (dan-then-dog)
+  (letrec ([dan (lambda () (cons "dan.jpg" dog))]
+           [dog (lambda () (cons "dog.jpg" dan))])
+    (cons "dan.jpg" dog)))
+
 (define ones (lambda ()
                (cons 1 ones)))
 
