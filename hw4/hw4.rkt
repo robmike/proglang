@@ -71,3 +71,18 @@
                 (set! idx (modulo (+ 1 idx) n))
               res])))
 
+(define-syntax-rule (while-less e1 do e2)
+  (begin (define x e1)
+         (define (helper)
+           (cond [(< e2 x) (helper)]
+                 [else #t]))
+         (helper)))
+
+(define-syntax while-less
+  (syntax-rules (do)
+    [(while-less e1 do e2)
+     (begin (define lim e1)
+            (define (helper)
+              (cond [(< e2 lim) (helper)]
+                    [else #t]))
+            (helper))]))
