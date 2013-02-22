@@ -46,18 +46,30 @@
                                              (if (empty? (cdr tt)) t (cdr tt))))))
   (lambda () (helper s t s t)))
 
+;;; (vector-assoc "c" #(("a" 1) ("x") ("b"  2)))
 (define (vector-assoc v vec)
   (define (helper v vec i)
     (cond [(< i (vector-length vec))
            (define el (vector-ref vec i))
 
-           (if (and (= 2 (length el))
+           (if (and (pair? el)
                     (equal? (car el)
                             v))
-               (cdr el)
+               el
                (helper v vec (+ 1 i)))]
           [else #f]))
   (helper v vec 0))
+
+(define (cached-assoc xs n)
+  (define cache (make-vector n #f))
+  (define idx 0)
+  (lambda (val)
+    (define c (vector-assoc val cache))
+    (cond [c c]
+          [else (define res (assoc val xs))
+                (vector-set! cache idx res)
+                (set! idx (modulo (+ 1 idx) n))
+              res])))
 
 (define ones (lambda ()
                (cons 1 ones)))
