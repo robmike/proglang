@@ -39,14 +39,11 @@
   (lambda () (cons 0 (stream-add-zero (cdr (s))))))
 
 (define (cycle-lists s t)
-  (define (helper s t xs xt)
-    (define ss (if (empty? xs) s xs))
-    (define tt (if (empty? xt) t xt))
+  (define (helper s t ss tt)
     (cons (cons (car ss) (car tt)) (lambda ()
-                                     (helper s t (cdr ss) (cdr tt)))))
-  (lambda ()
-    (cons (cons (car s) (car t)) (lambda ()
-                                   (helper s t (cdr s) (cdr t))))))
+                                     (helper s t (if (empty? (cdr ss)) s (cdr ss))
+                                             (if (empty? (cdr tt)) t (cdr tt))))))
+  (lambda () (helper s t s t)))
 
 (define ones (lambda ()
                (cons 1 ones)))
