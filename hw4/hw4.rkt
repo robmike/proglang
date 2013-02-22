@@ -46,6 +46,19 @@
                                              (if (empty? (cdr tt)) t (cdr tt))))))
   (lambda () (helper s t s t)))
 
+(define (vector-assoc v vec)
+  (define (helper v vec i)
+    (cond [(< i (vector-length vec))
+           (define el (vector-ref vec i))
+
+           (if (and (= 2 (length el))
+                    (equal? (car el)
+                            v))
+               (cdr el)
+               (helper v vec (+ 1 i)))]
+          [else #f]))
+  (helper v vec 0))
+
 (define ones (lambda ()
                (cons 1 ones)))
 
