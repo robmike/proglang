@@ -36,7 +36,8 @@
     (cons "dan.jpg" dog)))
 
 (define (stream-add-zero s)
-  (lambda () (cons 0 (stream-add-zero (cdr (s))))))
+  (define x (s))
+  (lambda () (cons (cons 0 (car x)) (stream-add-zero (cdr x)))))
 
 (define (cycle-lists s t)
   (define (helper s t ss tt)
