@@ -25,5 +25,20 @@
                    (cons (car x) sofar))]))
   (helper s n '()))
 
+(define (stream-for-n-steps s n)
+  (define x (s))
+  (cond [(or (= n 0) (empty? x)) '()]
+        [(cons (car x) (stream-for-n-steps (cdr x) (- n 1)))]))
+
+
+(define (funny-number-stream)
+  (define (helper i)
+    (cons (if (= 0 (remainder i 5)) (- 0 i) i)
+          (lambda ()
+            (helper (+ 1 i)))))
+  (helper 1))
+
 (define ones (lambda ()
                (cons 1 ones)))
+
+(define nats (letrec ([f (lambda (x) (cons x (lambda () (f (+ x 1)))))]) (lambda () (f 1))))
