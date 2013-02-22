@@ -18,14 +18,6 @@
           [(car (list-tail xs (remainder n (length xs))))])))
 
 (define (stream-for-n-steps s n)
-  (define (helper s n sofar)
-    (define x (s))
-    (cond [(or (= n 0) (empty? x)) sofar]
-          [(helper (cdr x) (- n 1)
-                   (cons (car x) sofar))]))
-  (helper s n '()))
-
-(define (stream-for-n-steps s n)
   (define x (s))
   (cond [(or (= n 0) (empty? x)) '()]
         [(cons (car x) (stream-for-n-steps (cdr x) (- n 1)))]))
@@ -42,6 +34,19 @@
   (letrec ([dan (lambda () (cons "dan.jpg" dog))]
            [dog (lambda () (cons "dog.jpg" dan))])
     (cons "dan.jpg" dog)))
+
+(define (stream-add-zero s)
+  (lambda () (cons 0 (stream-add-zero (cdr (s))))))
+
+(define (cycle-lists s t)
+  (define (helper s t xs xt)
+    (define ss (if (empty? xs) s xs))
+    (define tt (if (empty? xt) t xt))
+    (cons (cons (car ss) (car tt)) (lambda ()
+                                     (helper s t (cdr ss) (cdr tt)))))
+  (lambda ()
+    (cons (cons (car s) (car t)) (lambda ()
+                                   (helper s t (cdr s) (cdr t))))))
 
 (define ones (lambda ()
                (cons 1 ones)))
