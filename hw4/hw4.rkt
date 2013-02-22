@@ -17,3 +17,13 @@
           [(= 0 (length xs)) (error "list-nth-mod: empty list")]
           [(car (list-tail xs (remainder n (length xs))))])))
 
+(define (stream-for-n-steps s n)
+  (define (helper s n sofar)
+    (define x (s))
+    (cond [(or (= n 0) (empty? x)) sofar]
+          [(helper (cdr x) (- n 1)
+                   (cons (car x) sofar))]))
+  (helper s n '()))
+
+(define ones (lambda ()
+               (cons 1 ones)))
