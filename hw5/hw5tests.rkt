@@ -20,3 +20,10 @@
 
 (eval-under-env (var "x") (add-to-env "x" 5 '()))
 (eval-under-env (mlet "x" (add (int 5) (int 2)) (var "x")) null)
+
+(eval-under-env (call (fun #f "x" (add (var "x") (int 2))) (int 3)) null)
+(eval-under-env (call (fun "myadd2" "x" (add (var "x") (int 2))) (int 3)) null)
+(eval-under-env (call (fun "mysub1" "x" (ifgreater (var "x") (int 0) 
+                                                   (call (var "mysub1")
+                                                         (add (var "x") (int -1))) (int 0))) (int 3)) null)
+

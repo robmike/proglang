@@ -80,6 +80,19 @@
                                   (eval-under-env (ifgreater-e4 e) env))
                               (error "MUPL ifgreater arguments applied to non-integers")))]
         [(closure? e) e]
+        [(fun? e) (closure env e)]
+        [(call? e) (let ([funexpv (eval-under-env (call-funexp e) env)]
+                         [actualv (eval-under-env (call-actual e) env)])
+                     (if (not (closure? funexpv))
+                         (error "MUPL call argument appied to non-closure")
+                         (let* ([f (closure-fun funexpv)]
+                                [fname (fun-nameopt f)]
+                                [fformal (fun-formal f)]
+                                [fbody (fun-body f)]
+                                [newenv (add-to-env fformal actualv env)])
+                           (eval-under-env fbody (if fname
+                                                     (add-to-env fname funexpv newenv)
+                                                     newenv)))))]
         [#t (error "bad MUPL expression")]))
 
 ;; Do NOT change
