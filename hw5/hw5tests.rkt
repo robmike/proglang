@@ -13,3 +13,8 @@
 (racketlist->mupllist (list 3 4 5 (list 7 8)))
 
 (mupllist->racketlist (racketlist->mupllist (list 3 4 5 (list 7 8))))
+(eval-under-env (apair (int 5) (int 3)) null)
+
+(eval-under-env (isaunit (aunit)) null)
+(eval-under-env (isaunit (int 5)) null)
+

@@ -56,7 +56,13 @@
                (int (+ (int-num v1) 
                        (int-num v2)))
                (error "MUPL addition applied to non-number")))]
-        ;; CHANGE add more cases here
+        [(int? e) e]
+        [(apair? e) (apair (eval-under-env (apair-e1 e) env) (eval-under-env (apair-e2 e) env))]
+        [(fst? e) (apair-e1 (eval-under-env (fst-e e) env))]
+        [(snd? e) (apair-e2 (eval-under-env (snd-e e) env))]
+        [(aunit? e) e]
+        [(isaunit? e) (if (aunit? (isaunit-e e)) 1 0)]
+        
         [#t (error "bad MUPL expression")]))
 
 ;; Do NOT change
