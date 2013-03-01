@@ -9,3 +9,7 @@
    (eval-exp (call (call mupl-mapAddN (int 7))
                    (racketlist->mupllist 
                     (list (int 3) (int 4) (int 9)))))))
+
+(racketlist->mupllist (list 3 4 5 (list 7 8)))
+
+(mupllist->racketlist (racketlist->mupllist (list 3 4 5 (list 7 8))))
