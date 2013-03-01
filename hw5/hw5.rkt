@@ -64,7 +64,7 @@
         [(fst? e) (apair-e1 (eval-under-env (fst-e e) env))]
         [(snd? e) (apair-e2 (eval-under-env (snd-e e) env))]
         [(aunit? e) e]
-        [(isaunit? e) (if (aunit? (isaunit-e e)) 1 0)]
+        [(isaunit? e) (if (aunit? (isaunit-e e)) (int 1) (int 0))]
         [(mlet? e) (let ([name (mlet-var e)]
                          [value (eval-under-env (mlet-e e) env)]
                          [body (mlet-body e)])
@@ -101,7 +101,7 @@
         
 ;; Problem 3
 
-(define (ifaunit e1 e2 e3) "CHANGE")
+(define (ifaunit e1 e2 e3) (ifgreater (isaunit e1) (int 0) e2 e3))
 
 (define (mlet* lstlst e2) "CHANGE")
 

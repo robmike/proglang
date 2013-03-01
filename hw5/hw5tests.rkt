@@ -27,3 +27,7 @@
                                                    (call (var "mysub1")
                                                          (add (var "x") (int -1))) (int 0))) (int 3)) null)
 
+(eval-under-env (ifgreater (isaunit (aunit)) (int 0) (int 3) (int 1)) null)  ;3
+(eval-under-env (ifgreater (isaunit (int 4)) (int 0) (int 3) (int 1)) null) ; 1
+
+
