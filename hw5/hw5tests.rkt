@@ -18,3 +18,5 @@
 (eval-under-env (isaunit (aunit)) null)
 (eval-under-env (isaunit (int 5)) null)
 
+(eval-under-env (var "x") (add-to-env "x" 5 '()))
+(eval-under-env (mlet "x" (add (int 5) (int 2)) (var "x")) null)

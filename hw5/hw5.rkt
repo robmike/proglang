@@ -45,6 +45,9 @@
 ;; DO add more cases for other kinds of MUPL expressions.
 ;; We will test eval-under-env by calling it directly even though
 ;; "in real life" it would be a helper function of eval-exp.
+(define (add-to-env name value env)
+  (cons (cons name value) env))
+
 (define (eval-under-env e env)
   (cond [(var? e) 
          (envlookup env (var-string e))]
@@ -62,7 +65,21 @@
         [(snd? e) (apair-e2 (eval-under-env (snd-e e) env))]
         [(aunit? e) e]
         [(isaunit? e) (if (aunit? (isaunit-e e)) 1 0)]
-        
+        [(mlet? e) (let ([name (mlet-var e)]
+                         [value (eval-under-env (mlet-e e) env)]
+                         [body (mlet-body e)])
+                     (if (string? name)
+                         (eval-under-env body (add-to-env name value env))
+                         (error "MUPL let expression applied to non-string")))]
+        [(ifgreater? e) (let ([v1 (eval-under-env (ifgreater-e1 e) env)]
+                              [v2 (eval-under-env (ifgreater-e2 e) env)])
+                          (if (and (int? v1)
+                                   (int? v2))
+                              (if (> (int-num v1) (int-num v2))
+                                  (eval-under-env (ifgreater-e3 e) env)
+                                  (eval-under-env (ifgreater-e4 e) env))
+                              (error "MUPL ifgreater arguments applied to non-integers")))]
+        [(closure? e) e]
         [#t (error "bad MUPL expression")]))
 
 ;; Do NOT change
