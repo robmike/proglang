@@ -24,11 +24,11 @@
 
 (define (racketlist->mupllist xs)
   (if (null? xs)
-      '()
+      (aunit)
       (apair (car xs) (racketlist->mupllist (cdr xs)))))
 
 (define (mupllist->racketlist xs)
-  (if (null? xs)
+  (if (aunit? xs)
       '()
       (cons (apair-e1 xs) (mupllist->racketlist (apair-e2 xs)))))
 
@@ -125,9 +125,9 @@
 (define (ifeq e1 e2 e3 e4)
   (mlet "_y" e2 (mlet "_x" e1
                       (ifgreater
-                       (var "_x") (var "_y") e3
+                       (var "_x") (var "_y") e4
                        (ifgreater
-                        (var "_y") (var "_x") e3 e4)))))
+                        (var "_y") (var "_x") e4 e3)))))
 
 ;; Problem 4
 
