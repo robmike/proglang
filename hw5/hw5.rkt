@@ -164,4 +164,17 @@
   (eval-under-env-c (compute-free-vars e) null))
 
 
-(eval-under-env (call (call mupl-map (fun "add2" "x" (add (int 2) (var "x")))) (apair (int 3) (aunit))) null)
+;; Challenge Problem: Write a second version of eval-exp (bound to eval-exp-c) that builds closures
+;; with smaller environments: When building a closure, it uses an environment that is like the current
+;; environment but holds only variables that are free variables in the function part of the closure. (A free
+;; variable is a variable that appears in the function without being under some shadowing binding for the
+;; same variable.)
+;; Avoid computing a function’s free variables more than once. Do this by writing a function compute-free-vars
+;; that takes an expression and returns a different expression that uses fun-challenge everywhere in
+;; place of fun. The new struct fun-challenge (provided to you; do not change it) has a field freevars
+;; to store exactly the set of free variables for the function. Store this set as a Racket set of Racket strings.
+;; (Sets are predefined in Racket’s standard library; consult the documentation for useful functions such
+;; as set, set-add, set-member?, set-remove, set-union, and any other functions you wish.)
+;; You must have a top-level function compute-free-vars that works as just described — storing the
+;; free variables of each function in the freevars field — so the grader can test it directly. Then write a
+;; new “main part” of the interpreter that expects the sort of mupl 
