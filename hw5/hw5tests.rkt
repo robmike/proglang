@@ -41,3 +41,7 @@
 (eval-under-env (call (call mupl-map (fun "add2" "x" (add (int 2) (var "x"))))
                       (apair (int 0) (apair (int 3) (aunit)))) null)
 
+(eval-under-env (call (call mupl-mapAddN (int 4)) (apair (int 0) (apair (int 3) (aunit)))) null)
+
+
+

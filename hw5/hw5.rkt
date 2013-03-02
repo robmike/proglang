@@ -139,7 +139,12 @@
 
 (define mupl-mapAddN 
   (mlet "map" mupl-map
-        "CHANGE (notice map is now in MUPL scope)"))
+        (fun "mapAddN" "i"
+             (fun "_mapAddN" "ys"
+                  (call 
+                   (call (var "map") (fun "addi" "_x"
+                                          (add (var "i") (var "_x"))))
+                   (var "ys"))))))
 
 ;; Challenge Problem
 
