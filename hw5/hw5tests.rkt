@@ -32,3 +32,8 @@
 
 (mlet* `(( "x" . ,(int 3)) ( "y" . ,(int 3)) ( "z" . ,(var "x"))) (var "z"))
 (eval-under-env (mlet* `(( "x" . ,(int 3)) ( "y" . ,(int 1)) ( "z" . ,(var "x"))) (var "z")) null)  ; 3 :)
+
+(eval-under-env (ifeq (int 1) (int 1) (int 0) (int -1)) null)
+(eval-under-env (ifeq (int 1) (int 2) (int 0) (int -1)) null)
+(eval-under-env (ifeq (int 2) (int 2) (int 0) (int -1)) null)
+(eval-under-env (ifeq (int 3) (int 2) (int 0) (int -1)) null)

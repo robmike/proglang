@@ -108,7 +108,12 @@
       e2 
       (mlet (caar lstlst) (cdar lstlst) (mlet* (cdr lstlst) e2))))
 
-(define (ifeq e1 e2 e3 e4) "CHANGE")
+(define (ifeq e1 e2 e3 e4)
+  (mlet "_y" e2 (mlet "_x" e1
+                      (ifgreater
+                       (var "_x") (var "_y") e3
+                       (ifgreater
+                        (var "_y") (var "_x") e3 e4)))))
 
 ;; Problem 4
 
