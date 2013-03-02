@@ -49,6 +49,8 @@
   (cons (cons name value) env))
 
 (define (eval-under-env e env)
+  ;; (displayln "evaluating")
+  ;; (displayln e)
   (cond [(var? e) 
          (envlookup env (var-string e))]
         [(add? e) 
@@ -61,10 +63,20 @@
                (error "MUPL addition applied to non-number")))]
         [(int? e) e]
         [(apair? e) (apair (eval-under-env (apair-e1 e) env) (eval-under-env (apair-e2 e) env))]
-        [(fst? e) (apair-e1 (eval-under-env (fst-e e) env))]
-        [(snd? e) (apair-e2 (eval-under-env (snd-e e) env))]
+        [(fst? e) (let* ([ex (fst-e e)]
+                         [val (eval-under-env ex env)])
+                    (if (apair? val)
+                        (apair-e1 val)
+                        (error "MUPL fst applied to non-pair")))]
+        [(snd? e) (let* ([ex (snd-e e)]
+                         [val (eval-under-env ex env)])
+                    (if (apair? val)
+                        (apair-e2 val)
+                        (error "MUPL snd applied to non-pair")))]
         [(aunit? e) e]
-        [(isaunit? e) (if (aunit? (isaunit-e e)) (int 1) (int 0))]
+        [(isaunit? e) (if (aunit?
+                           (eval-under-env (isaunit-e e) env))
+                          (int 1) (int 0))]
         [(mlet? e) (let ([name (mlet-var e)]
                          [value (eval-under-env (mlet-e e) env)]
                          [body (mlet-body e)])
@@ -89,7 +101,9 @@
                                 [fname (fun-nameopt f)]
                                 [fformal (fun-formal f)]
                                 [fbody (fun-body f)]
-                                [newenv (add-to-env fformal actualv env)])
+                                [newenv (add-to-env fformal actualv (closure-env funexpv))])
+                           ;; (print newenv)
+                           ;; (displayln ":")
                            (eval-under-env fbody (if fname
                                                      (add-to-env fname funexpv newenv)
                                                      newenv)))))]
@@ -117,7 +131,11 @@
 
 ;; Problem 4
 
-(define mupl-map "CHANGE")
+(define mupl-map (fun "map" "f"
+                      (fun "_map" "xs"
+                           (ifaunit (var "xs")
+                                    (aunit) (apair (call (var "f") (fst (var "xs")))
+                                                   (call (var "_map") (snd (var "xs"))))))))
 
 (define mupl-mapAddN 
   (mlet "map" mupl-map
@@ -139,3 +157,6 @@
 ;; Do NOT change this
 (define (eval-exp-c e)
   (eval-under-env-c (compute-free-vars e) null))
+
+
+(eval-under-env (call (call mupl-map (fun "add2" "x" (add (int 2) (var "x")))) (apair (int 3) (aunit))) null)

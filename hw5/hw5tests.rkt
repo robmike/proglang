@@ -37,3 +37,7 @@
 (eval-under-env (ifeq (int 1) (int 2) (int 0) (int -1)) null)
 (eval-under-env (ifeq (int 2) (int 2) (int 0) (int -1)) null)
 (eval-under-env (ifeq (int 3) (int 2) (int 0) (int -1)) null)
+
+(eval-under-env (call (call mupl-map (fun "add2" "x" (add (int 2) (var "x"))))
+                      (apair (int 0) (apair (int 3) (aunit)))) null)
+
