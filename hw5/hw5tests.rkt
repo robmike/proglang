@@ -30,4 +30,5 @@
 (eval-under-env (ifgreater (isaunit (aunit)) (int 0) (int 3) (int 1)) null)  ;3
 (eval-under-env (ifgreater (isaunit (int 4)) (int 0) (int 3) (int 1)) null) ; 1
 
-
+(mlet* `(( "x" . ,(int 3)) ( "y" . ,(int 3)) ( "z" . ,(var "x"))) (var "z"))
+(eval-under-env (mlet* `(( "x" . ,(int 3)) ( "y" . ,(int 1)) ( "z" . ,(var "x"))) (var "z")) null)  ; 3 :)
