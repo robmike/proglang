@@ -74,16 +74,15 @@ class MyBoard < Board
   end
 
   def cheat
-    if @score >= Cheat_Cost and !Cheat_Piece.include?(@current_block.current_rotation)
-      puts "cheating"
+    if !@cheat_next_piece and
+        @score >= Cheat_Cost and
+        !Cheat_Piece.include?(@current_block.current_rotation)
       @score -= Cheat_Cost
       @cheat_next_piece = true
     end
-    puts @cheat_next_piece
   end
 
   def next_piece
-    puts "my next_piece"
     if @cheat_next_piece
       @current_block = MyPiece.new(Cheat_Piece, self)
       @cheat_next_piece = false
