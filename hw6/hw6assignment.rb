@@ -75,8 +75,7 @@ class MyBoard < Board
 
   def cheat
     if !@cheat_next_piece and
-        @score >= Cheat_Cost and
-        !Cheat_Piece.include?(@current_block.current_rotation)
+        @score >= Cheat_Cost
       @score -= Cheat_Cost
       @cheat_next_piece = true
     end
