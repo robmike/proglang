@@ -126,36 +126,36 @@ class Point < GeometryValue
   def shift(dx,dy)
     Point.new(@x + dx, @y + dy)
   end
-  # def intersect other
-  #   other.intersectPoint self
-  # end
-  # def intersectPoint p
-  #   if p.x == self.x and p.y == self.y
-  #     return self
-  #   else
-  #     return NoPoints.new();
-  #   end
-  # end
-  # def intersectLine line
-  #   if self.y == line.b + self.x*line.m
-  #     return self
-  #   else
-  #     return NoPoints.new()
-  #   end
-  # end
-  # def intersectVerticalLine vline
-  #   if self.x == vline.x
-  #     return self
-  #   else
-  #     return NoPoints.new()
-  #   end
-  # end
-  # def intersectWithSegmentAsLineResult seg
-  #   if self.x >= seg.x1 and self.x <= seg.x2 and
-  #       self.y >= seg.y1 and self.y <= seg.y2
-      
-  #   end
-  # end
+
+  def intersect other
+    other.intersectPoint self
+  end
+  def intersectPoint p
+    if p.x == self.x and p.y == self.y
+      return self
+    else
+      return NoPoints.new();
+    end
+  end
+  def intersectLine line
+    if self.y == line.b + self.x*line.m
+      return self
+    else
+      return NoPoints.new()
+    end
+  end
+  def intersectVerticalLine vline
+    if self.x == vline.x
+      return self
+    else
+      return NoPoints.new()
+    end
+  end
+  def intersectWithSegmentAsLineResult seg
+    if self.x >= seg.x1 and self.x <= seg.x2 and
+        self.y >= [seg.y1, seg.y2].max and self.y <= [seg.y1, seg.y2].min 
+    end
+  end
 
 end
 
@@ -176,6 +176,32 @@ class Line < GeometryValue
   def shift(dx,dy)
     Line.new(@m, @b + dy - m*dx) 
   end
+
+  def intersect other
+    other.intersectLine self
+  end
+  def intersectPoint p
+    p.intersectLine(self)
+  end
+  def intersectLine line
+    if self.b == line.b and self.m == line.m
+      return self
+    else
+      return NoPoints.new()
+    end
+  end
+
+  def intersectVerticalLine vline
+      return NoPoints.new()
+  end
+
+  def intersectWithSegmentAsLineResult seg
+    if self.x >= seg.x1 and self.x <= seg.x2 and
+        self.y >= seg.y1 and self.y <= seg.y2
+      
+    end
+  end
+
 end
 
 class VerticalLine < GeometryValue
@@ -194,6 +220,32 @@ class VerticalLine < GeometryValue
   def shift(dx,dy)
     VerticalLine.new(@x + dx)
   end
+
+  def intersect other
+    other.intersectLine self
+  end
+  def intersectPoint p
+    p.intersectVerticalLine(self)
+  end
+  def intersectLine line
+    line.intersectVerticalLine(self)
+  end
+
+  def intersectVerticalLine vline
+    if self.x == vline.x
+      return self
+    else
+      return NoPoints.new()
+    end
+  end
+
+  def intersectWithSegmentAsLineResult seg
+    if self.x >= seg.x1 and self.x <= seg.x2 and
+        self.y >= seg.y1 and self.y <= seg.y2
+      
+    end
+  end
+
 end
 
 class LineSegment < GeometryValue
@@ -234,6 +286,15 @@ class Intersect < GeometryExpression
   def initialize(e1,e2)
     @e1 = e1
     @e2 = e2
+  end
+  def eval_prog env 
+    e1.eval_prog(env).intersect(e2.eval_prog(e2))
+  end
+  def preprocess_prog
+    Intersect.new(e1.preprocess_prog, e2.preprocess_prog)
+  end
+  def shift(dx,dy)
+    self
   end
 end
 
