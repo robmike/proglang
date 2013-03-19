@@ -153,7 +153,10 @@ class Point < GeometryValue
   end
   def intersectWithSegmentAsLineResult seg
     if self.x >= seg.x1 and self.x <= seg.x2 and
-        self.y >= [seg.y1, seg.y2].max and self.y <= [seg.y1, seg.y2].min 
+        self.y >= [seg.y1, seg.y2].max and self.y <= [seg.y1, seg.y2].min
+      return self
+    else
+      return NoPoints.new()
     end
   end
 
@@ -196,10 +199,7 @@ class Line < GeometryValue
   end
 
   def intersectWithSegmentAsLineResult seg
-    if self.x >= seg.x1 and self.x <= seg.x2 and
-        self.y >= seg.y1 and self.y <= seg.y2
-      
-    end
+    return seg
   end
 
 end
@@ -240,10 +240,7 @@ class VerticalLine < GeometryValue
   end
 
   def intersectWithSegmentAsLineResult seg
-    if self.x >= seg.x1 and self.x <= seg.x2 and
-        self.y >= seg.y1 and self.y <= seg.y2
-      
-    end
+    return seg
   end
 
 end
@@ -276,6 +273,26 @@ class LineSegment < GeometryValue
   def shift(dx,dy)
     LineSegment.new(@x1 + dx, @x2 + dx, @y1 + dy, @y2 + dy)
   end
+
+  def intersect other
+    other.intersectLineSegment self
+  end
+  def intersectPoint p
+    p.intersectLineSegment(self)
+  end
+  def intersectLine line
+    line.intersectLineSegment(self)
+  end
+
+  def intersectVerticalLine vline
+    vline.intersectLineSegment(self)
+  end
+
+  # This is impossible since intersecting a line with another line cannot yield a line segment
+  def intersectWithSegmentAsLineResult seg
+    return seg
+  end
+
 end
 
 # Note: there is no need for getter methods for the non-value classes
@@ -292,9 +309,6 @@ class Intersect < GeometryExpression
   end
   def preprocess_prog
     Intersect.new(e1.preprocess_prog, e2.preprocess_prog)
-  end
-  def shift(dx,dy)
-    self
   end
 end
 
