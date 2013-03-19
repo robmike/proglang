@@ -117,6 +117,46 @@ class Point < GeometryValue
     @x = x
     @y = y
   end
+  def eval_prog env 
+    self # all values evaluate to self
+  end
+  def preprocess_prog
+    self # no pre-processing to do here
+  end
+  def shift(dx,dy)
+    Point.new(@x + dx, @y + dy)
+  end
+  # def intersect other
+  #   other.intersectPoint self
+  # end
+  # def intersectPoint p
+  #   if p.x == self.x and p.y == self.y
+  #     return self
+  #   else
+  #     return NoPoints.new();
+  #   end
+  # end
+  # def intersectLine line
+  #   if self.y == line.b + self.x*line.m
+  #     return self
+  #   else
+  #     return NoPoints.new()
+  #   end
+  # end
+  # def intersectVerticalLine vline
+  #   if self.x == vline.x
+  #     return self
+  #   else
+  #     return NoPoints.new()
+  #   end
+  # end
+  # def intersectWithSegmentAsLineResult seg
+  #   if self.x >= seg.x1 and self.x <= seg.x2 and
+  #       self.y >= seg.y1 and self.y <= seg.y2
+      
+  #   end
+  # end
+
 end
 
 class Line < GeometryValue
@@ -127,6 +167,15 @@ class Line < GeometryValue
     @m = m
     @b = b
   end
+  def eval_prog env 
+    self # all values evaluate to self
+  end
+  def preprocess_prog
+    self # no pre-processing to do here
+  end
+  def shift(dx,dy)
+    Line.new(@m, @b + dy - m*dx) 
+  end
 end
 
 class VerticalLine < GeometryValue
@@ -135,6 +184,15 @@ class VerticalLine < GeometryValue
   attr_reader :x
   def initialize x
     @x = x
+  end
+  def eval_prog env 
+    self # all values evaluate to self
+  end
+  def preprocess_prog
+    self # no pre-processing to do here
+  end
+  def shift(dx,dy)
+    VerticalLine.new(@x + dx)
   end
 end
 
@@ -150,6 +208,21 @@ class LineSegment < GeometryValue
     @y1 = y1
     @x2 = x2
     @y2 = y2
+  end
+  def eval_prog env 
+    self # all values evaluate to self
+  end
+  def preprocess_prog
+    if real_close(x1,x2) and real_close(y1,y2)
+      return Point.new(x1,y1)
+    end
+    if x2 < x1
+      return LineSegment.new(x2,y2,x1,y1)
+    end
+    return self
+  end
+  def shift(dx,dy)
+    LineSegment.new(@x1 + dx, @x2 + dx, @y1 + dy, @y2 + dy)
   end
 end
 
@@ -172,6 +245,16 @@ class Let < GeometryExpression
     @e1 = e1
     @e2 = e2
   end
+
+  def eval_prog env 
+    e2.eval_prog([[s, e1.eval_prog(env)]] + env)
+  end
+  def preprocess_prog
+    Let.new(@s, e1.preprocess_prog, e2.preprocess_prog)
+  end
+  def shift(dx,dy)
+    self
+  end
 end
 
 class Var < GeometryExpression
@@ -179,6 +262,15 @@ class Var < GeometryExpression
   # override any methods
   def initialize s
     @s = s
+  end
+  def eval_prog env 
+    self # all values evaluate to self
+  end
+  def preprocess_prog
+    self # no pre-processing to do here
+  end
+  def shift(dx,dy)
+    self
   end
 end
 
@@ -189,5 +281,14 @@ class Shift < GeometryExpression
     @dx = dx
     @dy = dy
     @e = e
+  end
+  def eval_prog env 
+    e.eval_prog(env).shift(dx,dy)
+  end
+  def preprocess_prog
+    Shift.new(dx,dy, e.preprocess_prog)
+  end
+  def shift(dx,dy)
+    self # only values need this method, eval_prog should recurse to a value
   end
 end
