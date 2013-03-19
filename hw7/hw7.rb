@@ -271,7 +271,7 @@ class LineSegment < GeometryValue
     return self
   end
   def shift(dx,dy)
-    LineSegment.new(@x1 + dx, @x2 + dx, @y1 + dy, @y2 + dy)
+    LineSegment.new(@x1 + dx, @y1 + dy, @x2 + dx, @y2 + dy)
   end
 
   def intersect other
@@ -305,10 +305,10 @@ class Intersect < GeometryExpression
     @e2 = e2
   end
   def eval_prog env 
-    e1.eval_prog(env).intersect(e2.eval_prog(e2))
+    @e1.eval_prog(env).intersect(@e2.eval_prog(env))
   end
   def preprocess_prog
-    Intersect.new(e1.preprocess_prog, e2.preprocess_prog)
+    Intersect.new(@e1.preprocess_prog, @e2.preprocess_prog)
   end
 end
 
@@ -322,10 +322,10 @@ class Let < GeometryExpression
   end
 
   def eval_prog env 
-    e2.eval_prog([[s, e1.eval_prog(env)]] + env)
+    @e2.eval_prog([[@s, @e1.eval_prog(env)]] + env)
   end
   def preprocess_prog
-    Let.new(@s, e1.preprocess_prog, e2.preprocess_prog)
+    Let.new(@s, @e1.preprocess_prog, @e2.preprocess_prog)
   end
   def shift(dx,dy)
     self
@@ -339,7 +339,12 @@ class Var < GeometryExpression
     @s = s
   end
   def eval_prog env 
-    self # all values evaluate to self
+    valp = env.select{|x| x.first == @s}
+    if !valp.nil?
+      val = valp.first[1]
+      return val.eval_prog(env)
+    end
+    raise "Did not find " + @s + " in " + env.to_s
   end
   def preprocess_prog
     self # no pre-processing to do here
@@ -358,10 +363,10 @@ class Shift < GeometryExpression
     @e = e
   end
   def eval_prog env 
-    e.eval_prog(env).shift(dx,dy)
+    @e.eval_prog(env).shift(@dx,@dy)
   end
   def preprocess_prog
-    Shift.new(dx,dy, e.preprocess_prog)
+    Shift.new(@dx,@dy, @e.preprocess_prog)
   end
   def shift(dx,dy)
     self # only values need this method, eval_prog should recurse to a value
