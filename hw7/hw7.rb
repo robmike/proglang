@@ -153,7 +153,7 @@ class Point < GeometryValue
   end
   def intersectWithSegmentAsLineResult seg
     if self.x >= seg.x1 and self.x <= seg.x2 and
-        self.y >= [seg.y1, seg.y2].max and self.y <= [seg.y1, seg.y2].min
+        self.y >= [seg.y1, seg.y2].min and self.y <= [seg.y1, seg.y2].max
       return self
     else
       return NoPoints.new()
@@ -187,15 +187,21 @@ class Line < GeometryValue
     p.intersectLine(self)
   end
   def intersectLine line
-    if self.b == line.b and self.m == line.m
-      return self
-    else
-      return NoPoints.new()
+    if self.m == line.m
+      if self.b == line.b
+        return self
+      else
+        return NoPoints.new()
+      end
     end
+    # different slopes
+    x = (line.b - @b)/(@m - line.m)
+    y = @b + @m*x
+    Point.new(x, y)
   end
 
   def intersectVerticalLine vline
-      return NoPoints.new()
+      return Point.new(vline.x, @b + @m*vline.x)
   end
 
   def intersectWithSegmentAsLineResult seg
@@ -222,7 +228,7 @@ class VerticalLine < GeometryValue
   end
 
   def intersect other
-    other.intersectLine self
+    other.intersectVerticalLine self
   end
   def intersectPoint p
     p.intersectVerticalLine(self)
@@ -262,8 +268,12 @@ class LineSegment < GeometryValue
     self # all values evaluate to self
   end
   def preprocess_prog
-    if real_close(x1,x2) and real_close(y1,y2)
-      return Point.new(x1,y1)
+    if real_close(x1,x2) 
+      if real_close(y1,y2)
+        return Point.new(x1,y1)
+      elsif y1 > y2
+        return LineSegment.new(x2,y2,x1,y1)
+      end
     end
     if x2 < x1
       return LineSegment.new(x2,y2,x1,y1)
@@ -288,9 +298,23 @@ class LineSegment < GeometryValue
     vline.intersectLineSegment(self)
   end
 
-  # This is impossible since intersecting a line with another line cannot yield a line segment
   def intersectWithSegmentAsLineResult seg
-    return seg
+    if @x1 < seg.x1
+      xx1 = seg.x1
+      yy1 = seg.y1
+    else
+      xx1 = @x1
+      yy1 = @y1
+    end
+
+    if @x2 > seg.x2
+      xx2 = seg.x2
+      yy2 = seg.y2
+    else
+      xx2 = @x2
+      yy2 = @y2
+    end
+    LineSegment.new(xx1, yy1, xx2, yy2)
   end
 
 end
